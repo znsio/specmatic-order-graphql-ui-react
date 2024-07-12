@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {
+      "provider": "filesystem",
+      "stub": ["./marketplacer.graphqls"]
+    }
+  ]
+}
