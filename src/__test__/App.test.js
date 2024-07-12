@@ -1,34 +1,18 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
+import { toast } from "react-toastify";
+import ProductForm from "../components/ProductForm";
 import { ApolloProvider } from "@apollo/client";
 import client from "../apolloClient";
-import CartForm from "../components/CartForm";
+import FindAvailableProductForm from "../components/FindAvailableProductForm";
 import { startGraphQlStub, stopGraphQlStub } from "specmatic";
-
-const fs = require('fs');
-const path = require('path');
 
 global.setImmediate = global.setImmediate || ((fn, ...args) => global.setTimeout(fn, 0, ...args));
 let stub;
 
-function readCartValues() {
-  console.log(__dirname);
-  console.log(path.resolve(__dirname, '../../test_data/createCart.md'))
-  const data = fs.readFileSync(path.resolve(__dirname, '../../test_data/createCart.md'), 'utf-8');
-  const firstNameMatch = data.match(/firstName: "([^"]+)"/);
-  const surnameMatch = data.match(/surname: "([^"]+)"/);
-  const phoneMatch = data.match(/phone: "([^"]+)"/);
-
-  return {
-    firstName: firstNameMatch ? firstNameMatch[1] : '',
-    surname: surnameMatch ? surnameMatch[1] : '',
-    phone: phoneMatch ? phoneMatch[1] : ''
-  };
-}
-
 beforeAll(async () => {
-  stub = await startGraphQlStub("127.0.0.1", 8080, "./test_data");
+  stub = await startGraphQlStub("127.0.0.1", 8080);
 }, 5000);
 
 jest.mock("react-toastify", () => ({
@@ -41,49 +25,54 @@ jest.mock("react-toastify", () => ({
 }));
 
 describe("App component tests", () => {
-  test('creates a cart and displays cart details', async () => {
-    const { firstName, surname, phone } = readCartValues();
+  test("should create product with given form fields", async () => {
+    await React.act(async () => {
+      // Use act from @testing-library/react
+      render(
+        <ApolloProvider client={client}>
+          <ProductForm />
+        </ApolloProvider>
+      );
+    });
 
+    // Fill out the form
+    fireEvent.change(screen.getByTestId("name"), { target: { value: "Test Product" } });
+    fireEvent.change(screen.getByTestId("inventory"), { target: { value: "10" } });
+    fireEvent.change(screen.getByTestId("type"), { target: { value: "gadget" } });
+
+    // Submit the form
+    fireEvent.click(screen.getByTestId("submit"));
+
+    // Wait for the mutation to be called
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith("Product added successfully");
+    });
+
+    // Optionally, check if the form is cleared
+    expect(screen.getByTestId("name").value).toBe("");
+    expect(screen.getByTestId("inventory").value).toBe("");
+    expect(screen.getByTestId("type").value).toBe("gadget");
+  });
+
+  test("should fetch available products", async () => {
     render(
       <ApolloProvider client={client}>
-        <CartForm />
+        <FindAvailableProductForm />
       </ApolloProvider>
     );
 
-    // Simulate form submission for creating a cart
-    fireEvent.click(screen.getByTestId('createCartButton'));
+    // Fill out the form
+    fireEvent.change(screen.getByTestId("pageSize"), { target: { value: "10" } });
+    fireEvent.change(screen.getByTestId("type"), { target: { value: "gadget" } });
 
-    // Wait for the cart details to be displayed
-    const cartDetails = await screen.findByTestId('cartDetails');
+    // Submit the form
+    fireEvent.click(screen.getByTestId("submit"));
 
-    expect(cartDetails).toBeInTheDocument();
-    expect(screen.getByTestId('firstName')).toHaveValue(firstName);
-    expect(screen.getByTestId('surname')).toHaveValue(surname);
-    expect(screen.getByTestId('phone')).toHaveValue(phone);
+    // Wait for the form submission and the response
+    await waitFor(() => {
+      expect(screen.getAllByTestId("product").length).toBeGreaterThan(0);
+    });
   });
-
-  // Test for the fetch cart form
-  test('fetches a cart by ID and displays cart details', async () => {
-    const { firstName, surname, phone } = readCartValues();
-
-    render(
-      <ApolloProvider client={client}>
-        <CartForm />
-      </ApolloProvider>
-    );
-
-    // Simulate form submission for fetching a cart
-    fireEvent.click(screen.getByTestId('fetchCartButton'));
-
-    // Wait for the cart details to be displayed
-    const fetchedCartDetails = await screen.findByTestId('fetchedCartDetails');
-
-    expect(fetchedCartDetails).toBeInTheDocument();
-    expect(screen.getByTestId('firstName')).toHaveValue(firstName);
-    expect(screen.getByTestId('surname')).toHaveValue(surname);
-    expect(screen.getByTestId('phone')).toHaveValue(phone);
-  });
-
 });
 
 afterAll(async () => {
