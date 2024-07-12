@@ -10,13 +10,21 @@ Install the node packages for this project.
 npm install
 ```
 
-## Start up the Specmatic stub
+## Running automated UI Component tests with Specmatic GraphQL Stub
+
+```shell
+npm test
+```
+
+## Bringing up the React application independently with Specmatic GraphQL Stub
+
+### Start up the Specmatic stub
 
 ```shell
 npm run specmatic:stub
 ```
 
-## Start the application
+### Start the application
 
 ```shell
 npm start
@@ -24,7 +32,7 @@ npm start
 
 This should automatically start the application and pull it up in your browser.
 
-## Explore the GraphQl spec using GraphiQL
+### Explore the GraphQl spec using GraphiQL
 
 ```shell
 npm run graphiql
