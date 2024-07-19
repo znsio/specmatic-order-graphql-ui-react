@@ -36,9 +36,9 @@ describe("App component tests", () => {
     });
 
     // Fill out the form
-    fireEvent.change(screen.getByTestId("name"), { target: { value: "Test Product" } });
+    fireEvent.change(screen.getByTestId("name"), { target: { value: "The Almanac" } });
     fireEvent.change(screen.getByTestId("inventory"), { target: { value: "10" } });
-    fireEvent.change(screen.getByTestId("type"), { target: { value: "gadget" } });
+    fireEvent.change(screen.getByTestId("type"), { target: { value: "book" } });
 
     // Submit the form
     fireEvent.click(screen.getByTestId("submit"));
