@@ -1,6 +1,5 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
 import { toast } from "react-toastify";
 import ProductForm from "../components/ProductForm";
 import { ApolloProvider } from "@apollo/client";
@@ -13,7 +12,7 @@ let stub;
 
 beforeAll(async () => {
   stub = await startGraphQlStub("127.0.0.1", 8080);
-}, 5000);
+}, 6000);
 
 jest.mock("react-toastify", () => ({
   toast: {
