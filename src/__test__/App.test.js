@@ -6,6 +6,7 @@ import { ApolloProvider } from "@apollo/client";
 import client from "../apolloClient";
 import FindAvailableProductForm from "../components/FindAvailableProductForm";
 import { startGraphQlStub, stopGraphQlStub } from "specmatic";
+import GetDispatchedProductByDateForm from "../components/GetDispatchedProductByDateForm";
 
 global.setImmediate = global.setImmediate || ((fn, ...args) => global.setTimeout(fn, 0, ...args));
 let stub;
@@ -72,6 +73,21 @@ describe("App component tests", () => {
       expect(screen.getAllByTestId("product").length).toBeGreaterThan(0);
     });
   });
+
+  test("should fetch dispatched product by date", async () => {
+    render(
+      <ApolloProvider client={client}>
+        <GetDispatchedProductByDateForm />
+      </ApolloProvider>
+    );
+
+    fireEvent.change(screen.getByTestId("date"), { target: { value: "2020-12-12" } });
+    fireEvent.click(screen.getByTestId("submit"));
+
+    await waitFor(() => {
+      expect(screen.getByText("12/12/2020")).toBeInTheDocument(); // Adjust the date format if needed
+    });
+});
 });
 
 afterAll(async () => {

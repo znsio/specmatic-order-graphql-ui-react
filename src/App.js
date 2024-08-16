@@ -3,6 +3,7 @@ import FindAvailableProductForm from './components/FindAvailableProductForm';
 import ProductForm from './components/ProductForm';
 import { ToastContainer, toast } from 'react-toastify';
 import { useEffect } from 'react';
+import GetDispatchedProductByDateForm from './components/GetDispatchedProductByDateForm';
 
 function App() {
   
@@ -25,6 +26,8 @@ function App() {
       <br/>
       <br/>
       <FindAvailableProductForm/>
+      <br/>
+      <GetDispatchedProductByDateForm/>
       <br/>
       <ToastContainer />
     </div>
