@@ -6,7 +6,7 @@ import { ApolloProvider } from "@apollo/client";
 import client from "../apolloClient";
 import FindAvailableProductForm from "../components/FindAvailableProductForm";
 import { startGraphQlStub, stopGraphQlStub } from "specmatic";
-import GetDispatchedProductByDateForm from "../components/GetDispatchedProductByDateForm";
+import FindOffersForDate from "../components/FindOffersForDate";
 
 global.setImmediate = global.setImmediate || ((fn, ...args) => global.setTimeout(fn, 0, ...args));
 let stub;
@@ -74,20 +74,23 @@ describe("App component tests", () => {
     });
   });
 
-  test("should fetch dispatched product by date", async () => {
+  test("should fetch offers valid until date", async () => {
     render(
       <ApolloProvider client={client}>
-        <GetDispatchedProductByDateForm />
+        <FindOffersForDate />
       </ApolloProvider>
     );
 
-    fireEvent.change(screen.getByTestId("date"), { target: { value: "2020-12-12" } });
+    fireEvent.change(screen.getByTestId("date"), { target: { value: "2024-12-31" } });
     fireEvent.click(screen.getByTestId("submit"));
 
     await waitFor(() => {
-      expect(screen.getByText("12/12/2020")).toBeInTheDocument(); // Adjust the date format if needed
+      expect(screen.getByText("WKND30")).toBeInTheDocument(); 
+      expect(screen.getByText("12/12/2024")).toBeInTheDocument(); 
+      expect(screen.getByText("SUNDAY20")).toBeInTheDocument(); 
+      expect(screen.getByText("12/25/2024")).toBeInTheDocument(); 
     });
-});
+  });
 });
 
 afterAll(async () => {

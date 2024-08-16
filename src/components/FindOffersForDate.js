@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useLazyQuery, gql } from '@apollo/client';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const GetDispatchedProductByDateForm = () => {
+const FindOffersForDate = () => {
   const [date, setDate] = useState('');
-  const [dispatchedProduct, setDispatchedProduct] = useState(null);
+  const [offers, setOffers] = useState(null);
 
   const formatDateString = (dateString) => {
-    return dateString.replace(/-/g, '/'); // Replace hyphens with slashes
+    return dateString.replace(/-/g, '/'); 
   };
   
-  const GET_DISPATCHED_PRODUCT_BY_DATE = gql`
+  const FIND_OFFERS_FOR_DATE = gql`
     query {
-      getDispatchedProductByDate(date: "${formatDateString(date)}") {
-        id
-        dispatchDate
+      findOffersForDate(date: "${formatDateString(date)}") {
+        offerCode
+        validUntil
       }
     }
   `;
 
-  const [getDispatchedProductByDate, { loading }] = useLazyQuery(GET_DISPATCHED_PRODUCT_BY_DATE, {
+  const [findOffersForDate, { loading }] = useLazyQuery(FIND_OFFERS_FOR_DATE, {
     fetchPolicy: 'network-only',
     onCompleted: (data) => {
-      setDispatchedProduct(data.getDispatchedProductByDate);
+      setOffers(data.findOffersForDate);
     },
     onError: () => {
-      setDispatchedProduct(null);
-      toast.error('Error fetching dispatched product');
+      setOffers(null);
+      toast.error('Error fetching offers');
     },
   });
 
@@ -40,12 +40,12 @@ const GetDispatchedProductByDateForm = () => {
       return;
     }
     
-    getDispatchedProductByDate({ variables: { date } });
+    findOffersForDate({ variables: { date } });
   };
 
   return (
     <div className="max-w-md mx-auto p-8 bg-white shadow-lg rounded-lg">
-      <h1 className="text-2xl font-bold mb-4">Get Dispatched Product by Date</h1>
+      <h1 className="text-2xl font-bold mb-4">Find offers valid until a certain date</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date">
@@ -71,18 +71,21 @@ const GetDispatchedProductByDateForm = () => {
           </button>
         </div>
       </form>
-      {dispatchedProduct && (
-        <div className="mt-8">
-          <h2 className="text-xl font-bold mb-4">Dispatched Product</h2>
-          <div className="p-4 border rounded-lg bg-gray-50 shadow-sm">
-            <p><strong>ID:</strong> {dispatchedProduct.id}</p>
-            <p><strong>Dispatch Date:</strong> {new Date(dispatchedProduct.dispatchDate).toLocaleDateString()}</p>
+      {offers && offers.map(offer => {
+        return (<>
+          <div className="mt-8">
+            <div className="p-4 border rounded-lg bg-gray-50 shadow-sm">
+              <p><strong>Offer code:</strong> {offer.offerCode}</p>
+              <p><strong>Valid Until:</strong> {new Date(offer.validUntil).toLocaleDateString()}</p>
+            </div>
           </div>
-        </div>
-      )}
+          </>
+        )
+      })
+      }
     </div>
   );
 };
 
-export default GetDispatchedProductByDateForm;
+export default FindOffersForDate;
 
