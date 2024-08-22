@@ -51,7 +51,7 @@
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.39",
     "specmatic": "^2.0.10",
-    "specmatic-beta": "github:znsio/specmatic-node-beta#b7a47fd",
+    "specmatic-beta": "github:znsio/specmatic-node-beta#4f0f51e",
     "tailwindcss": "^3.4.3"
   }
 }
