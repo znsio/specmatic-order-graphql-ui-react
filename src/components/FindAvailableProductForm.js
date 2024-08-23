@@ -9,8 +9,8 @@ const FindAvailableProductForm = () => {
   const [products, setProducts] = useState(null);
   
   const FIND_AVAILABLE_PRODUCTS = gql`
-    query {
-      findAvailableProducts(type: ${type}, pageSize: ${parseInt(pageSize, 10)}) {
+    query FindAvailableProducts($type: ProductType!, $pageSize: Int!) {
+      findAvailableProducts(type: $type, pageSize: $pageSize) {
         id
         name
         inventory
@@ -25,7 +25,8 @@ const FindAvailableProductForm = () => {
       setProducts(data.findAvailableProducts);
     },
     onError: () => {
-      setProducts([{"id": "PXFRP", "name": "MJKOV", "type": "gadget", "inventory": 255}]);
+      toast.dismiss();
+      toast.error('Encountered error executing the findAvailableProducts query');
     },
   });
 
