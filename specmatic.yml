@@ -1,6 +1,5 @@
 contract_repositories:
   - type: git 
     repository: https://github.com/znsio/specmatic-order-contracts.git
-    branch: graphql_variables_and_headers
     consumes:
       - io/specmatic/examples/store/graphql/products_bff.graphqls
