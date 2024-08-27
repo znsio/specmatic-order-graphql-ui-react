@@ -7,6 +7,7 @@ const FindAvailableProductForm = () => {
   const [type, setType] = useState('gadget');
   const [pageSize, setPageSize] = useState('');
   const [products, setProducts] = useState(null);
+  const [areProductsQueried, setAreProductsQueried] = useState(false);
   
   const FIND_AVAILABLE_PRODUCTS = gql`
     query FindAvailableProducts($type: ProductType!, $pageSize: Int!) {
@@ -22,7 +23,12 @@ const FindAvailableProductForm = () => {
   const [findAvailableProducts, { loading }] = useLazyQuery(FIND_AVAILABLE_PRODUCTS, {
     fetchPolicy: 'network-only',
     onCompleted: (data) => {
-      setProducts(data.findAvailableProducts);
+      if(!areProductsQueried) setAreProductsQueried(true);
+      if(!data.findAvailableProducts) {
+        setProducts([]);
+      } else {
+        setProducts(data.findAvailableProducts);
+      }
     },
     onError: () => {
       toast.dismiss();
@@ -39,8 +45,20 @@ const FindAvailableProductForm = () => {
       return;
     }
     
-    findAvailableProducts({ variables: { type, pageSize: parseInt(pageSize, 10) } });
+    findAvailableProducts({
+      variables: { type, pageSize: parseInt(pageSize, 10) },
+      context: {
+        headers: {
+          "X-region": "north-west"
+        }
+      }
+    });
   };
+
+  const isProductsValid = () => {
+    if(!products || products.every(product => !product)) return false;
+    return true;
+  }
 
   return (
     <div className="max-w-md mx-auto p-8 bg-white shadow-lg rounded-lg">
@@ -87,22 +105,34 @@ const FindAvailableProductForm = () => {
           </button>
         </div>
       </form>
-      {products && (
+
+      {areProductsQueried && !isProductsValid() && 
+          <div
+            className="mt-8 p-4 border rounded-lg bg-gray-50 shadow-sm"
+            data-testid="product"
+          >
+            <p>No products found</p>
+          </div>
+      }
+      {areProductsQueried && isProductsValid() && (
         <div className="mt-8">
           <h2 className="text-xl font-bold mb-4">Available Products</h2>
           <div className="grid grid-cols-1 gap-4">
-            {products.map((product) => (
-              <div 
-                key={product.id} 
-                className="p-4 border rounded-lg bg-gray-50 shadow-sm"
-                data-testid="product"
-              >
-                <p><strong>ID:</strong> {product.id}</p>
-                <p><strong>Name:</strong> {product.name}</p>
-                <p><strong>Inventory:</strong> {product.inventory}</p>
-                <p><strong>Type:</strong> {product.type}</p>
-              </div>
-            ))}
+            {products.map((product) => {
+              if(!product) return <></>;
+              return (
+                <div
+                  key={product.id}
+                  className="p-4 border rounded-lg bg-gray-50 shadow-sm"
+                  data-testid="product"
+                >
+                  <p><strong>ID:</strong> {product.id}</p>
+                  <p><strong>Name:</strong> {product.name}</p>
+                  <p><strong>Inventory:</strong> {product.inventory}</p>
+                  <p><strong>Type:</strong> {product.type}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
       )}

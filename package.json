@@ -50,8 +50,8 @@
   "devDependencies": {
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.39",
-    "specmatic": "^2.0.10",
-    "specmatic-beta": "github:znsio/specmatic-node-beta#1d15b221aefd2de216a5f9882b5f71eb1829f343",
+    "specmatic": "^2.0.16",
+    "specmatic-beta": "github:znsio/specmatic-node-beta#21a7394",
     "tailwindcss": "^3.4.3"
   }
 }
