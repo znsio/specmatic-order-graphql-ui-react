@@ -24,6 +24,32 @@ npm test
 npm run specmatic:stub
 ```
 
+### Testing the Specmatic stub
+
+Use the following curl commands to test if the stub is working as expected -
+
+1. Simple query
+```shell
+curl -X POST http://localhost:8080/graphql \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "query { findAvailableProducts(type: gadget, pageSize: 10) { id name inventory type } }"
+  }'
+```
+
+2. Query with variables 
+```shell
+curl -X POST http://localhost:8080/graphql \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "query FindAvailableProducts($type: ProductType!, $pageSize: Int!) { findAvailableProducts(type: $type, pageSize: $pageSize) { id name inventory type } }",
+    "variables": {
+      "type": "gadget",
+      "pageSize": 10
+    }
+  }'
+```
+
 ### Start the application
 
 ```shell
