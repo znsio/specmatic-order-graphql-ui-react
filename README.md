@@ -10,6 +10,11 @@ Install the node packages for this project.
 npm install
 ```
 
+```shell
+npm install git+https://github.com/znsio/specmatic-node-beta.git#d16f9fe
+```
+Note - Pick up the version (#d16f9fe) from package.json
+
 ## Running automated UI Component tests with Specmatic GraphQL Stub
 
 ```shell
