@@ -7,6 +7,7 @@ import client from "../apolloClient";
 import FindAvailableProductForm from "../components/FindAvailableProductForm";
 import { startGraphQlStub, stopGraphQlStub } from "specmatic";
 import FindOffersForDate from "../components/FindOffersForDate";
+import FindOffersAndProducts from "../components/FindOffersAndProducts";
 
 global.setImmediate = global.setImmediate || ((fn, ...args) => global.setTimeout(fn, 0, ...args));
 let stub;
@@ -91,6 +92,29 @@ describe("App component tests", () => {
       expect(screen.getByText("12/25/2024")).toBeInTheDocument(); 
     });
   });
+
+  test("should fetch offers and products based on date, type, and page size", async () => {
+    render(
+      <ApolloProvider client={client}>
+        <FindOffersAndProducts />
+      </ApolloProvider>
+    );
+
+    fireEvent.change(screen.getByTestId("multi-date"), { target: { value: "2024-12-31" } });
+    fireEvent.change(screen.getByTestId("multi-type"), { target: { value: "gadget" } });
+    fireEvent.change(screen.getByTestId("multi-pageSize"), { target: { value: "10" } });
+
+    fireEvent.click(screen.getByTestId("multi-submit"));
+
+    await waitFor(() => {
+      expect(screen.getByText("WKND30")).toBeInTheDocument();
+      expect(screen.getByText("12/12/2024")).toBeInTheDocument();
+      expect(screen.getByText("SUNDAY20")).toBeInTheDocument();
+      expect(screen.getByText("12/25/2024")).toBeInTheDocument();
+      expect(screen.getAllByTestId("multi-product").length).toBeGreaterThan(0);
+    });
+  });
+
 });
 
 afterAll(async () => {

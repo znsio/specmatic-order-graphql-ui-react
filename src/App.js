@@ -4,6 +4,7 @@ import ProductForm from './components/ProductForm';
 import { ToastContainer, toast } from 'react-toastify';
 import { useEffect } from 'react';
 import FindOffersForDate from './components/FindOffersForDate';
+import FindOffersAndProducts from './components/FindOffersAndProducts';
 
 function App() {
   
@@ -28,6 +29,9 @@ function App() {
       <FindAvailableProductForm/>
       <br/>
       <FindOffersForDate/>
+      <br/>
+      <br/>
+      <FindOffersAndProducts/>
       <br/>
       <ToastContainer />
     </div>
