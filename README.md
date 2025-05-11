@@ -11,9 +11,9 @@ npm install
 ```
 
 ```shell
-npm install git+https://github.com/znsio/specmatic-node-beta.git#4309b14
+npm install git+https://github.com/znsio/specmatic-node-beta.git#72bba12
 ```
-Note - Pick up the version (#4309b14) from package.json
+Note - Pick up the version (#72bba12) from package.json
 
 ## Running automated UI Component tests with Specmatic GraphQL Stub
 
