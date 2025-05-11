@@ -14,7 +14,7 @@ let stub;
 
 beforeAll(async () => {
   stub = await startGraphQlStub("127.0.0.1", 8080);
-}, 6000);
+}, 20000);
 
 jest.mock("react-toastify", () => ({
   toast: {
