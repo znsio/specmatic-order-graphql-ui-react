@@ -13,11 +13,6 @@ jobs:
             os: [ubuntu-latest, macos-latest]
         runs-on: ${{ matrix.os }}
         steps:
-          # Node 18 does resolves localhost to ipv6 address by default but refuses any connection to it
-          # Fix this by changing DNS entries in /etc/hosts file to resolve localhost to ipv4 address
-          # https://stackoverflow.com/questions/72648487/node-js-16-17-changed-resolution-of-localhost
-          # - run: ${{ !startsWith(matrix.os, 'ubuntu') }} || sudo sed -i '/localhost/c\127.0.0.1 localhost' /etc/hosts
-          # - run: ${{ !startsWith(matrix.os, 'macos') }} || sudo sed -i '' -e 's/.*localhost.*/127.0.0.1 localhost/g' /etc/hosts
           - uses: actions/checkout@v4
           - name: Set up JRE 17
             uses: actions/setup-java@v4
