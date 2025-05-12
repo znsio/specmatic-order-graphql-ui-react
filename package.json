@@ -26,7 +26,7 @@
     "test": "react-scripts test --coverage --detectOpenHandles --forceExit --transformIgnorePatterns \"node_modules/(?!axios)/\"",
     "eject": "react-scripts eject",
     "graphiql": "node graphiql-server.js",
-    "specmatic:stub": "java -jar node_modules/specmatic-beta/graphql/specmatic-graphql-all.jar virtualize --port 8080 --examples=graphql_examples",
+    "specmatic:stub": "java -jar node_modules/specmatic-commercial/graphql/specmatic-graphql-all.jar virtualize --port 8080 --examples=graphql_examples",
     "test-ci": "cross-env SPECMATIC_LOG_LEVEL=debug DEBUG=specmatic-order-graphql-ui-react:* npm run test"
   },
   "eslintConfig": {
@@ -51,7 +51,7 @@
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.39",
     "specmatic": "^2.11.3",
-    "specmatic-commercial": "github:znsio/specmatic-node-commercial#87b71a590ee2d1d272e90dc99f7f646fc92291aa",
+    "specmatic-commercial": "github:znsio/specmatic-node-commercial#7a4204131ed99647295f89ee562d1414c62ff401",
     "tailwindcss": "^3.4.3"
   }
 }
