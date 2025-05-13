@@ -71,16 +71,15 @@ const FindOffersForDate = () => {
           </button>
         </div>
       </form>
-      {offers && offers.map(offer => {
-        return (<>
-          <div className="mt-8">
+      {offers && offers.map((offer, index) => {
+        return (
+          <div key={index} className="mt-8">
             <div className="p-4 border rounded-lg bg-gray-50 shadow-sm">
               <p><strong>Offer code:</strong> {offer.offerCode}</p>
               <p><strong>Valid Until:</strong> {new Date(offer.validUntil).toLocaleDateString()}</p>
             </div>
           </div>
-          </>
-        )
+        );
       })
       }
     </div>
