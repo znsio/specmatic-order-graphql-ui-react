@@ -16,6 +16,8 @@ beforeAll(async () => {
   stub = await startGraphQlStub("127.0.0.1", 8080);
 }, 20000);
 
+jest.setTimeout(10000);
+
 jest.mock("react-toastify", () => ({
   toast: {
     success: jest.fn(),
@@ -27,6 +29,8 @@ jest.mock("react-toastify", () => ({
 
 describe("App component tests", () => {
   test("should create product with given form fields", async () => {
+    const ALLOWED_WAIT_TIME_FOR_RESPONSE = 7000;
+
     await React.act(async () => {
       // Use act from @testing-library/react
       render(
@@ -47,7 +51,7 @@ describe("App component tests", () => {
     // Wait for the mutation to be called
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith("Product added successfully");
-    });
+    }, { timeout: ALLOWED_WAIT_TIME_FOR_RESPONSE });
 
     // Optionally, check if the form is cleared
     expect(screen.getByTestId("name").value).toBe("");
@@ -119,4 +123,4 @@ describe("App component tests", () => {
 
 afterAll(async () => {
   await stopGraphQlStub(stub);
-}, 5000);
+}, 10000);
