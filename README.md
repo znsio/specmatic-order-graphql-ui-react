@@ -10,11 +10,6 @@ Install the node packages for this project.
 npm install
 ```
 
-```shell
-npm install git+https://github.com/znsio/specmatic-node-commercial.git#87b71a590ee2d1d272e90dc99f7f646fc92291aa
-```
-Note - Pick up the version (#72bba12) from package.json
-
 ## Running automated UI Component tests with Specmatic GraphQL Stub
 
 ```shell
